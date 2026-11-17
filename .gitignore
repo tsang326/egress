@@ -7,3 +7,6 @@ dist
 .DS_Store
 *.log
 # Do NOT ignore /.kiro — the hackathon rules require it in the repo.
+
+# CFAST 7.7.7 Fortran source: local reading reference only, never committed
+docs/refs/cfast-src/
