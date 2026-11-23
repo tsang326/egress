@@ -11,10 +11,12 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:bench": "FIRE_BENCH=1 vitest run tests/fire/bench --silent=false",
     "test:validation": "vitest run validation"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
+    "esbuild": "0.28.2",
     "fast-check": "4.3.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
