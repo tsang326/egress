@@ -1,0 +1,264 @@
+# Implementation Plan: crowd
+## Overview
+This plan builds the crowd model in `src/core/people/` bottom-up: constants and types first, then the Plan builder, the Flow_Field, the speed models, door and stair gates, agents, fire coupling, tenability, the recompute policy, steering, outputs, and the simulation loop with `runCrowd`. Run-level property tests, determinism checks, the Worker_Wrapper, the performance smoke test and benchmark, the banned-wording scan and the documentation note follow.
+Rules that apply to every task:
+- Language is TypeScript (strict). The design uses TypeScript, so no language question is needed.
+- SI units inside `src/core`. Every constant carries its source or an "estimate" or "numerical parameter" label in `constants.ts`.
+- No `Math.random`, `Date`, `performance`, DOM or `node:*` imports under `src/core/people/`. Imports come only from `src/core`. No new runtime dependency.
+- `runCrowd` and `buildPlan` never throw for object input. No output string says "safe", "compliant", "certified", "passes" or "meets code" about a building. The label for the time of the last exit is "evacuation time".
+- Every test task is required. No task is optional. Property tests are tagged `// Feature: crowd, Property N: <title>` and run with `numRuns >= 100`.
+- All crowd tests live in `tests/people/`, including the opt-in benchmark in `tests/people/bench/` (Requirement 8.3).
+- `package.json` already has `typecheck`, `test` and `test:validation`. Task 19.3 adds `test:bench:crowd` and leaves the fire `test:bench` unchanged.
+- No task runs `git commit`. The user commits.
+## Tasks
+- [x] 1. Foundation: constants, types, warnings
+  - [x] 1.1 Create `constants.ts` with a source comment on every value
+    - Every constant in the design's "Constants and sources" table, each with one comment that names the source and the alternative considered, or says "estimate" or "numerical parameter": cell size, time step, agent radius, level SFPE `k` 1.40, speed-density slope 0.266, free-speed density cap 0.54 and zero-speed density `1/0.266`, with the unimpeded speed `S(0.54) ≈ 1.19` computed from them and not a separate constant (Fruin and Predtechenskii-Milinskii named as alternatives), SFPE stair table and default riser and tread, door specific flow 1.3, boundary layer 0.15, minimum effective width, 10 s flow window, stair maximum density, pre-movement medians and log standard deviation, both Jin smoke laws and the darkness speed, alert coefficient, eye height, CO, CO2, O2 and heat FED constants, FED limit, visibility limits and area boundary, temperature limit, refresh interval, switch margin, visibility penalty, smoke quantisation step, wall-clearance cost, density radius, enrol radius, near-fire distance, corridor length limit, plan-size warning, plan limits (12 floors, 100 compartments, 1,000,000 cells, labelled estimates), agent limit, warning cap, progress and series intervals, ambient temperature
+    - Import molar masses and `K_VIS` from `../fire/constants` instead of redefining them
+    - Add every constant that later tasks need here, so no later task edits this file
+    - _Requirements: 1.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.9, 3.7, 4.5, 4.6, 4.7, 5.7, 5.8, 6.7_
+  - [x] 1.2 Create `types.ts` and `warnings.ts`
+    - `types.ts`: PlanInput, FloorInput, StairLinkInput, Plan and its parts, GateSpec, ExitSpec, StairLinkModel, ExitField, CrowdInput, AgentInput, DelayParams, CrowdResult, AgentRecord, GateSeries, FloorHeatMap, CrowdSummary, CrowdStats, CrowdRunOptions, AgentStore (types only, as in the design's Data Models section)
+    - `warnings.ts`: `CrowdWarningCode` union and one constructor per code that builds a plain-language message, with severity, location and time, plus a per-code cap with one `WARNINGS_TRUNCATED` entry; messages contain none of the banned words
+    - _Requirements: 1.3, 1.5, 3.2, 4.1, 5.6, 6.7, 6.9, 7.5_
+  - [x] 1.3 Write static tests for constants and warnings
+    - Every exported constant in `constants.ts` has a leading comment that names a source or contains "estimate" or "numerical parameter"
+    - Every `warnings.ts` message template is free of the banned words
+    - _Requirements: 5.7, 5.8, 6.9, 9.10_
+- [x] 2. Plan builder
+  - [x] 2.1 Implement `plan/grid.ts`, `plan/reachability.ts`, `plan/gatesFromPlan.ts`
+    - `grid.ts`: index helpers, 8-neighbour table, wall-clearance cost per cell, `fitsAgent` test with 9 sample points
+    - `gatesFromPlan.ts`: door runs and exit groups by 4-neighbour connection, clear width as the longer side of the bounding box times 0.25 m, effective width `max(W − 0.3, 0.25)`, `DOOR_TOO_NARROW` for runs that do not fit, gate descriptors for stair entries
+    - `reachability.ts`: flood fill from all exit cells over the base graph with stair links, one `UNREACHABLE_REGION` per unreached connected region with floor and bounding box
+    - _Requirements: 1.1, 1.8, 2.3, 2.4, 2.9_
+  - [x] 2.2 Implement `plan/builder.ts` (`buildPlan`)
+    - Checks in a fixed order: limits, elevation range, cell types, compartment interning, gates, narrow passages, stair link matching with incline length and SFPE table clamping, reachability
+    - Invalid input returns `status: "invalid"` with a Warning that names the limit, floor or cell; never throws; a Plan with no `exit` cell is still a valid Plan
+    - Base fields are filled in task 3.2
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.8_
+  - [x] 2.3 Implement `plan/ascii.ts` and `tests/people/syntheticFire.ts`
+    - `floorFromAscii(rows, legend)` builds a `FloorInput` from text rows for tests and fixtures (`#` wall, `.` free, `D` door, `E` exit, `S` stair, and compartment letters through the legend)
+    - `syntheticFire` builds a fire `Result` with `status: "ok"` and constant or linearly changing layer states per compartment, without running the fire solver
+    - _Requirements: 1.1, 4.2, 4.3_
+  - [x] 2.4 Write unit tests for the Plan_Builder
+    - Limits (13 floors, 101 compartments, 1,000,001 cells), bad cell type, non-finite and out-of-range elevation, stair link with unmatched footprint names both floors and coordinates, `DOOR_TOO_NARROW` for 1 cell and a pass for 2 cells, one `UNREACHABLE_REGION` per sealed pocket, plan with no exit is valid, no throw on any invalid input
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.6, 1.8_
+- [x] 3. Flow_Field
+  - [x] 3.1 Implement `flowfield/costs.ts` and `flowfield/dijkstra.ts`
+    - Node graph over all floors with 8-neighbour moves (1 and √2), no diagonal cut across wall corners, stair link edges in both directions, wall-clearance cost within 2 cells, per-compartment multipliers with `Infinity` removing a node
+    - Binary min-heap in typed arrays ordered by `(cost, node index)`, fixed neighbour order, `next[]` records the first neighbour that gave the final cost
+    - _Requirements: 1.9, 2.2, 2.3_
+  - [x] 3.2 Compute base fields in `buildPlan` and export the public API
+    - One `ExitField` per edge-connected exit group, all multipliers equal to 1, added to the Plan; add the `PLAN_LARGE` warning above the node threshold
+    - Create `index.ts` with `buildPlan` and the type re-exports
+    - _Requirements: 1.9_
+  - [x] 3.3 Implement the sample plan builder and the property-test generators
+    - `tests/people/samplePlans.ts`: small named Plans built with `floorFromAscii` and `buildPlan` (open room with one exit, two rooms with a door, two floors with a stair, sealed exit, no exit); every sample says it is an invented building
+    - `tests/people/arbitraries.ts`: `arbPlan` (1 to 3 floors, rooms, door gaps of 2 to 6 cells, 0 to 3 exits, 0 or 1 stair shaft, shrinks toward one floor, one room and one exit, plus sealed-pocket and no-exit variants), `arbAgents` (up to 30 agents on free cells, both types, some entry exits missing), `arbFire` and `arbNoFire` built on `syntheticFire`, 30 to 120 s durations
+    - `fc.configureGlobal({ numRuns: 100, verbose: 1 })` so a failing property prints the shrunk counterexample and seed
+    - _Requirements: 9.11, 9.12_
+  - [x] 3.4 Write property test for the Flow_Field
+    - **Property 5: Flow_Field is strictly descending and optimal**
+    - **Validates: Requirements 9.5, 2.2, 2.3, 1.9**
+  - [x] 3.5 Write unit tests for the Flow_Field
+    - Compare with a Bellman-Ford reference on small grids; tie-breaking is stable; stair link cost; clearance cost; a blocked compartment removes nodes; building the same Plan twice gives bit-identical fields; the number of fields equals the number of exit groups
+    - _Requirements: 1.9, 2.2, 2.3_
+- [x] 4. Speed models
+  - [x] 4.1 Implement `steering/speed.ts`
+    - `levelSpeed(D)` = `k(1 − 0.266 D)` with `k = 1.40`, `D` held at 0.54 when below it (so the maximum is `S(0.54) ≈ 1.19`, derived), and 0 at and above `1/0.266` (about 3.76) persons/m²; `stairSpeed(kStair, D)` with the same `a`, the same cap and zero at the same density; `smokeFactor(K, law)` from the Jin lines with the darkness-speed floor and 1 for `K ≤ 0`; stair table lookup with clamping
+    - _Requirements: 2.5, 2.6, 2.7, 4.5_
+  - [x] 4.2 Write property test for the speed relations
+    - **Property 11: Speed relations are bounded and monotone**
+    - Includes: the maximum level speed equals `S(0.54)`, speed is monotone non-increasing in D, and speed is 0 at `D ≥ 1/0.266`; the same for stair speed with its table `k`
+    - **Validates: Requirements 2.5, 2.6, 2.7, 4.5**
+  - [x] 4.3 Write unit tests for the speed-density relation and the Smoke_Speed_Factor
+    - Level speed at D = 0, 0.3, 0.54, 1, 1.88, 3.76 and 5; the maximum equals `S(0.54)`; speed is monotone non-increasing in D and zero at `1/0.266`; stair table points with the same cap; `f(0) = 1`; floor reached at `K ≥ 1.75` for the non-irritant law; irritant law values
+    - _Requirements: 2.5, 2.6, 2.7, 4.5_
+- [x] 5. Door flow limiter and stairs
+  - [x] 5.1 Implement `gates/gate.ts`
+    - Token accumulator capped at `max(1, rate)`, ring of the last `maxInWindow` crossing step indices (200-step window), FIFO queue ordered by enrolment step then agent index, one armed agent, re-arm when the armed agent leaves, integer step counters only
+    - _Requirements: 2.9, 2.10, 2.11_
+  - [x] 5.2 Implement `gates/stairs.ts`
+    - Stair channel with shared density and speed `k_stair (1 − 0.266 D)`, entry through the stair gate with the maximum-density check, progress along the incline, transfer to the same grid cell on the adjacent floor in the same step, `STAIR_RESULT` warning per used link
+    - _Requirements: 2.7, 2.8, 6.7_
+  - [x] 5.3 Write unit tests for the door flow limit and stairs
+    - A 1 m door releases 0.92 persons/s; a window-boundary case with no more than `floor(10 × 1.3 × W_eff)` crossings; FIFO order; the armed agent leaving re-arms the next head in the same step; stair arrival lands on the same cell of the next floor; stair entry blocked at the maximum density
+    - _Requirements: 2.8, 2.9, 2.10_
+- [x] 6. Checkpoint - plan, flow field, speed and gates
+  - Run `npm test` and `npm run typecheck`. Ensure both pass, ask the user if questions arise.
+- [x] 7. Agents
+  - [x] 7.1 Implement `agents/state.ts`, `agents/delay.ts`, `agents/knowledge.ts`
+    - `state.ts`: structure-of-arrays store as in the design
+    - `delay.ts`: log-normal delay by Box-Muller from `createPrng(seed)` with two draws per input agent in input order (excluded agents included), default and input parameters, `DELAY_PARAMS_REJECTED` for non-finite, median ≤ 0 or log standard deviation < 0, `delaySteps = ceil(delayS / dt)`
+    - `knowledge.ts`: visitor entry exit with the nearest-exit estimate and `ENTRY_EXIT_ESTIMATED`, staff know all exits, Alert from smoke or `alarmTimeS`, guidance exits added without removing known ones, `AGENT_TYPE_REJECTED` exclusion
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11_
+  - [x] 7.2 Write unit tests for the Pre_Movement_Delay and knowledge
+    - Same seed gives the same delays; sample median of 2,000 draws within 5 % of the parameter; invalid parameters fall back with a Warning; excluded agent still consumes its two draws; visitor knows only its entry exit; Alert adds guidance exits and keeps existing ones; unknown type excluded with a Warning and the run continues
+    - _Requirements: 3.2, 3.3, 3.4, 3.5, 3.7, 3.8, 3.10, 3.11_
+- [x] 8. Fire coupling
+  - [x] 8.1 Implement `coupling/fireCoupling.ts` and `coupling/layers.ts`
+    - Reject `fire.status !== "ok"` and empty series with `FIRE_STATUS`; map plan compartments to fire compartments with `COMPARTMENT_MISSING_IN_FIRE` per cell; forward-only time cursor and linear interpolation; hold the last sample with exactly one `FIRE_RESULT_ENDED`; layer selection at 1.6 m; `K = opticalDensityPerM × ln 10`; mass fractions to volume fractions with the rest as N2; ambient state for cells without a compartment
+    - _Requirements: 1.5, 4.1, 4.2, 4.3, 4.4, 4.8_
+  - [x] 8.2 Write property test for fire coupling
+    - **Property 12: Layer reading by interpolation**
+    - **Validates: Requirements 4.2, 4.4, 4.8**
+  - [x] 8.3 Write unit tests for fire coupling
+    - Interpolation at, between and after samples; single-sample hold; layer choice at interface heights above and below 1.6 m; `K` from `visibilityM = Infinity` is 0; non-"ok" status and empty series give `FIRE_STATUS`; unknown compartment gives ambient conditions and one Warning per cell
+    - _Requirements: 1.5, 4.1, 4.2, 4.3, 4.4, 4.8_
+- [x] 9. Tenability
+  - [x] 9.1 Implement `tenability/fed.ts` and `tenability/limits.ts`
+    - Asphyxiant rate (CO, CO2 hyperventilation factor, low O2 with the 20 % cutoff), convective heat rate (ISO 13571 Eq. 9 above the 60 °C estimate), per-step increments never negative, input check with `FED_INPUT_INVALID`, FED sum limit 1.0 with cause list, upper-layer temperature limit, visibility and temperature classes per compartment (blocked, smoky, clear), one function per relation with its source in a comment
+    - _Requirements: 4.6, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8_
+  - [x] 9.2 Write unit tests for the FED formulas
+    - CO at 2,000 ppm gives 0.0728 per minute; O2 at 15 % gives 1/140 per minute; heat at 100 °C gives 24.7 min to FED 1; ambient gives exactly 0; `V_CO2` at 0 % and 5 %; non-finite and negative inputs leave FED unchanged and report a Warning; causes list names every positive term; temperature-limit incapacitation
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
+- [x] 10. Flow_Field recompute policy
+  - [x] 10.1 Implement `flowfield/recompute.ts` and `flowfield/choose.ts`
+    - Per-compartment class and quantised multiplier, immediate recompute in the same step on a class change (coalesced per step), drift refresh throttled to `FIELD_REFRESH_INTERVAL_S`, refresh skipped when no agent moves, only fields that an active agent knows are recomputed, stale fields rebuilt on first need, `chooseExit` switches if and only if the best cost is lower than the current cost by more than the margin
+    - _Requirements: 4.6, 4.7_
+  - [x] 10.2 Write unit tests for the recompute policy
+    - A synthetic fire that crosses the visibility limit at sample k triggers a recompute in that step and not earlier; several compartments changing in one step cause one recompute per needed field; drift refresh respects the interval; the switch margin boundary; ties go to the lowest exit index
+    - _Requirements: 4.6, 4.7_
+- [x] 11. Checkpoint - agents, coupling, tenability and recompute
+  - Run `npm test` and `npm run typecheck`. Ensure both pass, ask the user if questions arise.
+- [x] 12. Spatial hash and steering
+  - [x] 12.1 Implement `spatial/hash.ts`
+    - Counting-sort uniform grid per floor with bucket size `DENSITY_RADIUS_M`, clearing only touched buckets, density `D = neighbours / (π r²)`, zero for no neighbour, neighbour queries over 3×3 buckets in index order
+    - _Requirements: 2.4, 2.5, 2.6_
+  - [x] 12.2 Implement `steering/move.ts` and `steering/separation.ts`
+    - Target from `next[]`, desired displacement `v × dt` without overshoot, gate check and enrolment, agent separation with two relaxation iterations, wall resolution that keeps the centre at least one radius from every wall cell and reverts the step if the centre is still inside a wall, double-buffered positions
+    - _Requirements: 2.2, 2.4, 2.10, 2.12_
+  - [x] 12.3 Write unit tests for the hash and steering
+    - Density at 0, 1 and several neighbours; a 50-agent open-room run keeps pair distances at or above twice the radius once settled; an agent never ends a step inside a wall cell, including at a diagonal corner; a blocked agent is held in place with the Blocked flag
+    - _Requirements: 2.2, 2.4, 2.5, 2.12_
+- [x] 13. Outputs
+  - [x] 13.1 Implement `outputs/series.ts`, `outputs/heatmap.ts`, `outputs/summary.ts`, `outputs/text.ts`
+    - FED history every 20 steps plus the final-state sample; per-gate flow and queue series for every whole second from 0 to the duration; integer congestion counts times `dt`; summary counts and RSET (`null` when nobody is out); all user-visible strings built in `text.ts` with fixed templates ("evacuation time", separate integers for incapacitated and still inside, the fixed notice as the only string with "fire-safety review"); location warnings for stairs, long corridors, near-fire and unmeasured material
+    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9_
+  - [x] 13.2 Write unit tests for outputs
+    - Summary counts add up to the total; RSET equals the last exit time; no one out gives `null` and the "no one got out" text; both counts shown as separate integers; congestion sum equals the sum of inside time within 1e-6; gate series cover every whole second; the notice is present and contains the required phrase
+    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.8, 6.9_
+- [x] 14. Input validation, simulation loop and `runCrowd`
+  - [x] 14.1 Implement `input/validate.ts`
+    - Check type, required fields, `durationS` finite and above 0, seed, agent count limit, no `exit` cell (`NO_EXIT`), agent start on a wall or off-grid (`AGENT_START_INVALID`), fire status; `INPUT_INVALID` names the offending field; `TypeError` only for a non-object argument
+    - _Requirements: 1.6, 1.7, 4.1, 7.5_
+  - [x] 14.2 Implement `sim/loop.ts` and `sim/stats.ts`
+    - Fixed 0.05 s step over the order: fire state and classes, recompute on events, hash and density, speeds, gates, moves, separation, wall resolution, FED, final states, series and progress; stop early when every agent has a final state; top-level `try/catch` returning `status: "failed"` with `INTERNAL_ERROR` and the data so far; counters for steps, recomputes and nodes settled
+    - _Requirements: 2.1, 2.2, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 2.10, 2.11, 2.12, 3.9, 4.2, 4.6, 4.7, 5.1, 5.2, 5.3, 5.4, 6.1, 6.4, 6.5, 7.4_
+  - [x] 14.3 Wire `runCrowd` in `index.ts`
+    - Public `runCrowd(input, fire, options)` with `onProgress` and `recordStats`; validation, delays, initial fields, loop, outputs; re-export the public types
+    - _Requirements: 4.1, 6.1, 6.2, 7.1, 7.3, 7.5_
+  - [x] 14.4 Write unit and integration tests for the run
+    - Input validation cases (wrong type, missing field, bad duration, no exit, agent in wall); two-floor stair transfer lands on the same grid cell; a 100-agent queue at a 1 m door drains in about `100 / 0.92` s plus walking time within 15 %; a visitor changes exit only past the switch margin; an incapacitated agent stops and does not block others; the real `runFire` on a 2-room scenario feeds `runCrowd` and returns status "ok"
+    - _Requirements: 1.6, 1.7, 2.8, 2.9, 2.10, 4.1, 4.7, 5.3, 7.5_
+- [x] 15. Run-level property tests
+  - [x] 15.1 Write property test for agent count conservation
+    - **Property 1: Agent count conservation**
+    - **Validates: Requirements 9.1, 6.2, 2.11**
+  - [x] 15.2 Write property test for walls
+    - **Property 2: No agent in or through a wall**
+    - **Validates: Requirements 9.2, 2.4**
+  - [x] 15.3 Write property test for unreachable and missing exits
+    - **Property 4: No exit or no reachable exit means nobody gets out**
+    - **Validates: Requirements 9.4, 1.6, 1.8, 2.12**
+  - [x] 15.4 Write property test for the door flow limit
+    - **Property 6: Door flow limit and first-in first-out release**
+    - **Validates: Requirements 9.6, 2.9, 2.10**
+  - [x] 15.5 Write property test for no fire
+    - **Property 7: No fire, no dose**
+    - **Validates: Requirements 9.7, 5.1, 5.2, 4.3**
+  - [x] 15.6 Write property test for stair use
+    - **Property 8: Stair use follows a finite descending route**
+    - **Validates: Requirements 9.8, 2.8**
+  - [x] 15.7 Write property test for FED and incapacitation
+    - **Property 9: FED is non-negative, monotone and consistent with incapacitation**
+    - **Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5**
+  - [x] 15.8 Write property test for output conservation
+    - **Property 10: Congestion map and series conserve what they count**
+    - **Validates: Requirements 6.4, 6.5**
+- [x] 16. Checkpoint - core model complete
+  - Run `npm test` and `npm run typecheck`. Ensure both pass, ask the user if questions arise.
+- [x] 17. Determinism
+  - [x] 17.1 Write property test for determinism
+    - **Property 3: Determinism**
+    - **Validates: Requirements 9.3, 7.1, 2.1, 3.8, 1.9**
+    - Run A, run B and run A again compared with `Object.is` over every numeric field, every agent position at every step, and every Warning in order; building the Plan twice gives bit-identical fields
+  - [x] 17.2 Write source-scan and environment tests
+    - No `Math.random`, `Date`, `performance`, `window`, `document` or `Worker` and no import from outside `src/core` in `src/core/people/`; `package.json` has no runtime `dependencies`; a run with browser globals undefined completes in Node
+    - _Requirements: 7.2, 7.3, 7.7_
+- [x] 18. Worker_Wrapper
+  - [x] 18.1 Implement `worker/protocol.ts` and `worker/handler.ts`
+    - Message types `run`, `progress`, `result`, `error`; `handleMessage(msg, post)` validates the shape, runs `runCrowd` with a progress callback driven by simulated time (every 5 s or less, first at or before 5 s, last at the end), then posts exactly one `result` last; a malformed message posts one invalid `result` with `WORKER_REQUEST_INVALID` and no progress; no `Worker` global used
+    - _Requirements: 7.4, 7.6_
+  - [x] 18.2 Write property test for the worker protocol
+    - **Property 13: Worker protocol and input robustness**
+    - **Validates: Requirements 7.4, 7.5, 7.6**
+  - [x] 18.3 Write unit tests for the Worker_Wrapper
+    - Progress spacing of 5 s or less; a run shorter than 5 s posts only the final progress; exactly one `result` and it is the last message; malformed request, missing field, non-positive duration and non-finite duration each give status "invalid" with a Warning naming the field and no progress
+    - _Requirements: 7.4, 7.5, 7.6_
+- [x] 19. Performance smoke test and benchmark
+  - [x] 19.1 Implement the shared performance fixture
+    - `tests/people/fixtures/benchCase.ts`: 6 floors of 96 × 64 cells, 5 compartments per floor for 30 rooms, one stair shaft, 3 ground-floor exits, 300 agents (50 per floor), and the matching 30-compartment fire `Scenario` (reuse the fire-zone benchmark scenario if it is exported, otherwise extract it into a shared helper without changing that benchmark's behaviour); duration is a parameter
+    - _Requirements: 8.1, 8.5_
+  - [x] 19.2 Write the default-run smoke test
+    - Runs when `CROWD_BENCH` is not `1`; same Plan, 60 s of simulated time, fire then crowd in process through `handleMessage`; fails unless the Plan builds, the fire Result has status "ok" and the crowd Result has status "ok"; no time limit
+    - _Requirements: 8.5_
+  - [x] 19.3 Write the opt-in benchmark and add the script
+    - `tests/people/bench/crowd.bench.test.ts`: runs only when `CROWD_BENCH=1`; 600 s case, 5 consecutive runs, none discarded, fire then crowd through the in-process Worker_Wrapper logic; prints the median combined time, the median fire time and the fire share in percent; fails if the combined median is 10 s or more; if any run throws or does not complete, fails and reports the run number and error without a median
+    - Add `"test:bench:crowd": "CROWD_BENCH=1 vitest run tests/people/bench"` to `package.json` and leave `test:bench` unchanged
+    - If the median exceeds the budget, apply the design's levers in order (coarser fire print interval, fire solver levers, report) and never loosen the 10 s limit
+    - _Requirements: 8.1, 8.2, 8.3, 8.4_
+- [x] 20. Banned-wording scan
+  - [x] 20.1 Write the output-string scan test
+    - Collect every user-visible string: `outputs/text.ts` templates, `warnings.ts` messages, the notice, and every string in the Crowd_Results of the sample plans and a generated run (summary text, warnings, labels); fail with each offending string and banned word ("safe", "compliant", "certified", "passes", "meets code"); the notice is the only string that contains "fire-safety review"; every RSET label uses "evacuation time"
+    - _Requirements: 6.8, 6.9, 9.10_
+- [x] 21. Documentation
+  - [x] 21.1 Add the reference-simulation note
+    - Add a "Crowd model" section to `README.md` and a short `src/core/people/README.md`: the model is a reference simulation, it is a simplified simulation for understanding risks and does not replace a fire-safety review by the authorities or an engineer, output calls the last exit "evacuation time", where `constants.ts` sources and the open estimates are listed, and how to run `npm test` and `npm run test:bench:crowd`; no building is called safe or compliant
+    - _Requirements: 6.8, 6.9_
+  - [x] 21.2 Write a test for the documentation note
+    - Both files contain the notice text and the phrase "reference simulation", and neither uses a banned word about a building
+    - _Requirements: 6.8, 6.9, 9.10_
+- [x] 22. Final checkpoint - Ensure all tests pass
+  - Run `npm test` and `npm run typecheck`, then `npm run test:bench:crowd`. Ensure all pass, ask the user if questions arise.
+- [x] 23. Benchmark fixture guards and leftovers
+  - [x] 23.1 Write the benchmark fixture guard tests
+    - `tests/people/benchGuard.test.ts`: the benchmark Plan builds with no `UNREACHABLE_REGION` Warning; with a no-fire Result from `syntheticFire` all 300 agents are out within 600 s; a failure lists each agent that is not out with its floor and position
+    - `tests/people/fixtures/benchCase.ts` exports `buildBenchPlanResult` so the test can read the builder's Warnings
+    - _Requirements: 8.1, 8.5_
+  - [x] 23.2 Write the long-corridor warning test
+    - `tests/people/longCorridor.test.ts`: a corridor above `CORRIDOR_LENGTH_LIMIT_M` gives exactly one `LONG_CORRIDOR` Warning that names the corridor; a corridor at the limit and a long room give none
+    - `buildPlan` fills `Plan.compartmentKinds` from `PlanInput.compartments` (it was never filled, so the warning could not be issued)
+    - _Requirements: 6.7_
+  - [x] 23.3 Print the run counters in the benchmark
+    - The benchmark requests `recordStats` through the Worker_Wrapper request and prints the outcome counts, steps, Flow_Field recomputes and Dijkstra nodes settled
+    - _Requirements: 8.2, 8.4_
+## Notes
+- No task is optional. Every test task is required.
+- Each task lists the requirements it covers. Property test tasks name the design property number and the requirement clauses they validate.
+- Design Properties 1 to 8 are the eight properties that Requirements 9.1 to 9.8 require. Properties 9 to 13 cover the remaining testable criteria and are also required.
+- Property assignment: P1, P2, P4, P6, P7, P8, P9, P10 in section 15; P3 in 17.1; P5 in 3.4; P11 in 4.2; P12 in 8.2; P13 in 18.2.
+- Requirement 9.9 unit tests: Plan_Builder (2.4), Flow_Field (3.5), speed-density and Smoke_Speed_Factor (4.3), Door flow limit (5.3), Pre_Movement_Delay (7.2), FED formulas (9.2), Flow_Field recompute (10.2), Worker_Wrapper (18.3).
+- Requirement 9.10 is covered by 20.1, with smaller scans in 1.3 and 21.2.
+- `constants.ts` is edited only in task 1.1. `tests/people/arbitraries.ts` is written once in task 3.3, so later property tests add no generators to it.
+- The design's open items (smoke-speed fit, CO2 factor, estimates) stay labelled in `constants.ts`. No task replaces an estimate with an unsourced number.
+- The benchmark runs the Worker_Wrapper logic in process in Node, not in a browser Worker. The browser glue in `src/web/crowd/` belongs to a later spec.
+- This workflow only produces the plan. To execute it, open `tasks.md` and click "Start task" next to a task.
+## Task Dependency Graph
+```json
+{
+  "waves": [
+    { "id": 0, "tasks": ["1.1", "1.2"] },
+    { "id": 1, "tasks": ["1.3", "2.1", "2.3", "4.1", "5.1", "7.1", "8.1", "9.1", "12.1", "13.1"] },
+    { "id": 2, "tasks": ["2.2", "4.2", "4.3", "5.2", "7.2", "8.2", "8.3", "9.2", "12.2", "13.2", "14.1"] },
+    { "id": 3, "tasks": ["2.4", "3.1", "5.3", "12.3"] },
+    { "id": 4, "tasks": ["3.2", "10.1"] },
+    { "id": 5, "tasks": ["3.3", "3.5", "10.2", "14.2"] },
+    { "id": 6, "tasks": ["3.4", "14.3"] },
+    { "id": 7, "tasks": ["14.4", "15.1", "15.2", "15.3", "15.4", "15.5", "15.6", "15.7", "15.8", "17.1", "17.2", "18.1", "19.1"] },
+    { "id": 8, "tasks": ["18.2", "18.3", "19.2", "19.3", "20.1", "21.1"] },
+    { "id": 9, "tasks": ["21.2"] },
+    { "id": 10, "tasks": ["23.1", "23.2", "23.3"] }
+  ]
+}
+```

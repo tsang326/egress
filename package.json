@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:bench": "FIRE_BENCH=1 vitest run tests/fire/bench --silent=false",
+    "test:bench:crowd": "CROWD_BENCH=1 vitest run tests/people/bench",
     "test:validation": "vitest run validation"
   },
   "devDependencies": {
