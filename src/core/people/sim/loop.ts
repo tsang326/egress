@@ -255,6 +255,7 @@ export function runLoop(st: LoopState, cfg: LoopConfig): void {
       if ((si !== STATE_PRE_MOVE && si !== STATE_MOVING) || (a.flags[i]! & FLAG_ALERTED) !== 0) continue;
       if (!isAlert(readings[compOf(i)]!.extinctionPerM, t, cfg.alarmTimeS)) continue;
       a.flags[i] = a.flags[i]! | FLAG_ALERTED;
+      if (a.alertStep[i]! < 0) a.alertStep[i] = s;
       if (staffAgent(i) || nE === 0) continue;
       if (guidance === null) {
         for (let k = 0; k < n; k++) staffChoice[k] = staffAgent(k) ? a.exitChoice[k]! : -1;
@@ -271,9 +272,12 @@ export function runLoop(st: LoopState, cfg: LoopConfig): void {
       for (let e = 0; e < nE; e++) if (a.known[i * nE + e] === 1) needed[e] = 1;
     }
     const rebuilt = fm.update(s, cls, mult, needed, anyMoving);
-    // [E] End of the pre-movement delay (Requirement 3.9).
+    // [E] End of the pre-movement delay (Requirement 3.9, amended): the delay counts from the moment the agent is
+    // alerted by the alarm or by smoke at eye height: pre-movement time is the time from the warning or cue to the
+    // start of travel (ISO/TR 16738 and the SFPE Handbook use this definition). Without an alarm time the run starts at
+    // the cue and delays count from step 0 (index.ts). With one, an agent that is never alerted stays put.
     for (let i = 0; i < n; i++) {
-      if (a.state[i] === STATE_PRE_MOVE && s >= a.delaySteps[i]!) {
+      if (a.state[i] === STATE_PRE_MOVE && a.alertStep[i]! >= 0 && s >= a.alertStep[i]! + a.delaySteps[i]!) {
         a.state[i] = STATE_MOVING;
         reeval[i] = 1;
       }

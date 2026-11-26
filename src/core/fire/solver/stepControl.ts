@@ -12,6 +12,7 @@ import {
   STARTUP_MAX_STEPS,
   STEP_BDF2_OMEGA_MAX,
   STEP_GROWTH_MAX,
+  STEP_FLAT_ACCEPTS,
   STEP_GROWTH_MIN,
   STEP_HOLD_AFTER_NEWTON_FAIL,
   STEP_MAX_FACTOR,
@@ -39,6 +40,7 @@ export interface SolverParams {
   stepMaxFactor: number;
   stepGrowthMax: number;
   stepGrowthMin: number;
+  stepFlatAccepts: number;
   bdf2OmegaMax: number;
   stepHoldAfterNewtonFail: number;
   newton: NewtonParams;
@@ -57,6 +59,7 @@ export const DEFAULT_SOLVER_PARAMS: SolverParams = {
   stepMaxFactor: STEP_MAX_FACTOR,
   stepGrowthMax: STEP_GROWTH_MAX,
   stepGrowthMin: STEP_GROWTH_MIN,
+  stepFlatAccepts: STEP_FLAT_ACCEPTS,
   bdf2OmegaMax: STEP_BDF2_OMEGA_MAX,
   stepHoldAfterNewtonFail: STEP_HOLD_AFTER_NEWTON_FAIL,
   newton: DEFAULT_NEWTON_PARAMS,
@@ -130,6 +133,7 @@ export class ImplicitSolver {
   private readonly f: Float64Array;
   /** Accepted steps left during which the step may not grow (set by a Newton failure cut). */
   private holdSteps = 0;
+  private flatSteps = 0; // accepted steps in a row kept at the same size although their factor was above 1
   /**
    * Accepted steps left in the start-up phase after a restart (0: not in start-up). While it is positive the step
    * floor is hMinStartup instead of hMin, so a fast initial transient (for example the pressure relaxation through an
@@ -192,6 +196,7 @@ export class ImplicitSolver {
     resetHistory(this.hist, t, y, yp);
     this.matrix.valid = false;
     this.holdSteps = 0;
+    this.flatSteps = 0;
     this.startupSteps = this.p.startupMaxSteps;
     this.h = this.p.hInitial;
   }
@@ -284,7 +289,17 @@ export class ImplicitSolver {
 
       let factor = errNorm > 0 ? p.stepSafety * Math.pow(errNorm, -exponent) : p.stepGrowthMax;
       factor = Math.min(factor, p.stepGrowthMax);
-      let next = factor >= p.stepGrowthMin ? hStep * factor : hStep;
+      let next = hStep;
+      if (factor >= p.stepGrowthMin) {
+        next = hStep * factor;
+        this.flatSteps = 0;
+      } else if (factor > 1 && !landing) {
+        // STEP_FLAT_ACCEPTS: an error estimate that stays below the tolerance at the same h is a noise floor; let h grow.
+        if (++this.flatSteps >= p.stepFlatAccepts) {
+          next = hStep * factor;
+          this.flatSteps = 0;
+        }
+      } else this.flatSteps = 0;
       if (this.holdSteps > 0) {
         this.holdSteps--;
         next = Math.min(next, hStep); // no growth while holding after a Newton failure cut

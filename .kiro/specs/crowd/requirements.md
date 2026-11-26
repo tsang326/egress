@@ -24,7 +24,7 @@ The Crowd_Model is a reference simulation. It does not approve a building and no
 - **Agent**: A simulated person with a type, a position, a speed, a Pre_Movement_Delay and a FED state.
 - **Agent_Type**: `visitor` (knows only the Exit it entered by, then follows signs or staff) or `staff` (knows every Exit).
 - **Alert**: The first moment an Agent sees smoke, or the alarm time given in the input.
-- **Pre_Movement_Delay**: The time from the start of the run to the moment an Agent starts to move toward an Exit.
+- **Pre_Movement_Delay**: The time from the moment an Agent is alerted (alarm time reached, or smoke at eye height above K_ALERT_PER_M) to the moment it starts to move toward an Exit. *Amended during implementation of run-view: the original text counted it from the start of the run, which made the alarm time change nothing but exit knowledge. Pre-movement time is defined from the warning or cue (ISO/TR 16738, SFPE Handbook). When the input has no alarm time, the run itself is the cue and the delay counts from the start, as before.*
 - **Flow_Field**: A per-Exit map of walking cost to that Exit over all walkable Cells, computed by Dijkstra or fast marching with 8-neighbour moves and a wall-clearance cost.
 - **Eye_Height**: 1.6 m above the Floor, the height at which layer conditions are read for an Agent (ISO 13571 practice).
 - **Layer_State**: For one Compartment and time: interface height, layer temperatures, CO, CO2 and O2 concentrations, and visibility, from the fire Result.
@@ -95,7 +95,7 @@ The Crowd_Model is a reference simulation. It does not approve a building and no
 6. THE Crowd_Model SHALL give each staff Agent knowledge of every Exit in the Plan.
 7. WHEN the run starts, THE Crowd_Model SHALL draw one Pre_Movement_Delay for each Agent from a log-normal distribution selected by that Agent's Agent_Type, using the Seeded_PRNG, with the parameters (in seconds) and their source stated in `constants.ts`.
 8. THE Crowd_Model SHALL return identical Pre_Movement_Delay values for each Agent when run twice with the same input and the same seed.
-9. WHILE the simulation time is less than the Agent's Pre_Movement_Delay, THE Crowd_Model SHALL keep the Agent at its start position.
+9. WHILE the Agent has not been alerted, or less than its Pre_Movement_Delay has passed since it was alerted, THE Crowd_Model SHALL keep the Agent at its start position. *(Amended, see the Pre_Movement_Delay glossary entry.)*
 10. WHERE the input sets delay parameters for an Agent_Type, THE Crowd_Model SHALL use the input values for that Agent_Type in place of the defaults, provided the median is greater than 0 s and the log-standard-deviation is 0 or greater.
 11. IF the input delay parameters for an Agent_Type are not finite, the median is 0 s or less, or the log-standard-deviation is less than 0, THEN THE Crowd_Model SHALL use the default parameters for that Agent_Type and add a Warning that names the Agent_Type and the rejected values.
 

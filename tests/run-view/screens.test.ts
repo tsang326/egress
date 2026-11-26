@@ -5,6 +5,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createCompareScreen, createChangePanel } from '../../src/web/compare/compareScreen';
+import type { SetupState } from '../../src/web/setup/scenarioBuilder';
 import { createHomeScreen } from '../../src/web/home/homeScreen';
 import { SAFETY_NOTICE } from '../../src/web/plan/importScreen';
 import { createResultsScreen } from '../../src/web/results/resultsScreen';
@@ -103,6 +104,21 @@ describe('results', () => {
     createChangePanel(box, { run, onRun: (_s, _st, label) => got.push(label), onBack: () => undefined });
     click('[data-action="run-b"]');
     expect(got).toHaveLength(1);
+  });
+
+  it('an alarm-time change keeps every other setting of run A (Req 6.1, amended)', () => {
+    const run = cafe();
+    box.replaceChildren();
+    const states: SetupState[] = [];
+    createChangePanel(box, { run, onRun: (_s, st) => states.push(st), onBack: () => undefined });
+    const kind = box.querySelector<HTMLSelectElement>('select[aria-label="Kind of change"]')!;
+    kind.value = 'alarm';
+    kind.dispatchEvent(new Event('change'));
+    const value = box.querySelector<HTMLSelectElement>('select[aria-label="What to change"]')!;
+    value.value = 'alarm:120';
+    click('[data-action="run-b"]');
+    expect(states).toHaveLength(1);
+    expect(states[0]).toEqual({ ...run.config, alarmTimeS: 120 });
   });
 
   it('the compare screen shows a difference row per metric (Req 6.3)', () => {

@@ -158,10 +158,13 @@ describe('exit choice margin (Requirement 4.7)', () => {
   const left = plan.exits.find((e) => e.cells[0]! % 42 === 0)!.id;
   const right = plan.exits.find((e) => e.cells[0]! % 42 === 41)!.id;
   const run = (cx: number): string | null => {
-    // The alarm sounds at 0.5 s and a sign points to the left exit; the visitor already walks towards the right one.
+    // Smoke at eye height alerts the visitor at about 0.5 s and a sign points to the left exit; the visitor already
+    // walks towards the right one (no alarm time, so its pre-movement delay counts from the start of the run).
+    // Optical density rises linearly from 0 to 8 /m over 90 s and crosses K_ALERT_PER_M / ln 10 at about 0.49 s.
+    const smoke = syntheticFire({ durationS: 90, compartments: [{ id: 'A', end: { lower: { o2: 0.23, co2: 0, co: 0, opticalDensityPerM: 8 } } }] });
     const r = runCrowd(
-      crowdInput(plan, [agentAtCell('v', 'visitor', 'F0', cx, 3, right)], 90, { delay: SHORT_DELAY, alarmTimeS: 0.5, guidance: { signExitIds: [left] } }),
-      noFire(plan, 90),
+      crowdInput(plan, [agentAtCell('v', 'visitor', 'F0', cx, 3, right)], 90, { delay: SHORT_DELAY, guidance: { signExitIds: [left] } }),
+      smoke,
     );
     return r.agents[0]!.exitId;
   };
@@ -256,5 +259,19 @@ describe('the real fire solver feeds the crowd model', () => {
     const r = runCrowd(crowdInput(built.plan!, [agentAtCell('p', 'staff', 'F0', 3, 2)], 60, { delay: SHORT_DELAY }), fire);
     expect(r.status).toBe('ok');
     expect(r.agents).toHaveLength(1);
+  });
+});
+describe('pre-movement counts from the alarm (Requirement 3.9, amended)', () => {
+  const rows = ['#'.repeat(12), '#' + 'a'.repeat(10) + 'E', '#' + 'a'.repeat(10) + 'E', '#'.repeat(12)];
+  const plan = buildPlan({ floors: [floorFromAscii(rows, { a: 'A' })], stairLinks: [] }).plan!;
+  const exitAt = (alarmTimeS: number): number => {
+    const r = runCrowd(crowdInput(plan, [agentAtCell('v', 'staff', 'F0', 1, 1)], 200, { delay: SHORT_DELAY, alarmTimeS }), noFire(plan, 200));
+    return r.agents[0]!.exitTimeS!;
+  };
+  it('moving the alarm 60 s later moves the exit time 60 s later when there is no smoke', () => {
+    const early = exitAt(10);
+    const late = exitAt(70);
+    expect(early).toBeGreaterThan(10);
+    expect(late - early).toBeCloseTo(60, 0);
   });
 });

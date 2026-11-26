@@ -246,6 +246,7 @@ export interface AgentStore {
   state: Uint8Array; // 0 pre-move, 1 moving, 2 in stair, 3 out, 4 incapacitated
   flags: Uint8Array; // bit 0 blocked, 1 alerted, 2 ever blocked, 3 near-fire warned
   delaySteps: Int32Array; // pre-movement delay as a step index
+  alertStep: Int32Array; // step at which the agent was alerted (alarm or smoke), -1 before; the delay counts from here
   exitChoice: Int16Array; // exit index
   known: Uint8Array; // n * nExits, 1 when the agent knows the exit
   fedAsph: Float64Array;

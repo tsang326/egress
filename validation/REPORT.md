@@ -33,7 +33,7 @@ All cases are listed as they came out, including cases where the model differs f
 | validation/cases/verification/Mass_Balance/species_mass_1.in | within tolerance | 195 | 0 |  |
 | validation/cases/verification/Mass_Balance/species_mass_2.in | outside tolerance | 650 | 100 | 100 time points outside tolerance |
 | validation/cases/verification/Mass_Balance/species_mass_3.in | within tolerance | 650 | 0 |  |
-| validation/cases/verification/Mass_Balance/species_mass_4.in | outside tolerance | n/a | n/a | The CFAST-order run (verdict run) was stopped at the 600 s wall-clock limit (Req 13.14). Simulated time reached: 7540 s of 10000 s (time of the last sample). Wall-clock time: 600 s. |
+| validation/cases/verification/Mass_Balance/species_mass_4.in | outside tolerance | n/a | n/a | The CFAST-order run (verdict run) was stopped at the 600 s wall-clock limit (Req 13.14). Simulated time reached: 7500 s of 10000 s (time of the last sample). Wall-clock time: 940.25 s. |
 | validation/cases/verification/Ventilation/ventilation_4.in | within tolerance | 686 | 0 |  |
 
 ## Known causes
@@ -43,7 +43,7 @@ Cases outside tolerance and what is known about each difference.
 - `validation/cases/delco/Test_02.in`: Worst: Comp 1, upper layer Rise (K) at 1785 s, CFAST 97.455, model 102.91, ratio 1.1198. Cause not yet identified. The upper layer Rise of Comp 1 is higher in the model than in CFAST by a steady 5.4 K (5.0 % to 5.6 % of the Rise, growing) in the last 150 s of the run, from 1635 s to the end at 1785 s, just above the 5 % limit. Before 1635 s the difference is inside the tolerance. Not looked at further.
 - `validation/cases/delco/Test_03.in`: Worst: Comp 1, upper layer Rise (K) at 1785 s, CFAST 111.39, model 117.09, ratio 1.0236. Cause not yet identified. The upper layer Rise of Comp 1 is higher in the model than in CFAST by 5.7 K (about 5.1 % of the Rise) at the last three output times, 1755 s to 1785 s (end of the run), just above the 5 % limit. Before 1755 s the difference is inside the tolerance. Not looked at further.
 - `validation/cases/delco/Test_05.in`: Worst: South East Door, vent flow, lower outflow (kg/s) at 180 s, CFAST 0.028178, model 0.038077, ratio 1.9797. Cause not yet identified. Two single output times are outside the tolerance: the upper outflow of the North East Door at 195 s and the lower outflow of the South East Door at 180 s, both early in the run and both with the model flow higher than CFAST. Every other point of the case, 7524 in all, is inside the tolerance. Not looked at further.
-- `validation/cases/delco/Test_06.in`: Worst: West Double Door, vent flow, lower inflow (kg/s) at 1230 s, CFAST 0.0062891, model 0.040082, ratio 6.7586. At 1230 s the three burners are re-igniting after an oxygen-limited extinction (about 1190 to 1215 s). The door's lower inflow depends on the gauge pressure in Comp 3, which is −0.034 Pa in CFAST and −0.118 Pa in the model. This sets the neutral plane at 0.053 m in CFAST and 0.184 m in the model, and inflow scales as height^1.5, so the flows are 0.0063 and 0.0401 kg/s. The pressure sits on a steep flank of a short pulse, which falls by 0.12 Pa/s in Comp 3 and 0.40 Pa/s in Comp 1. All three pressures, the interface heights and the layer temperatures are consistent with the model's pulse arriving about 0.65 s earlier than CFAST's. At 1215 s and 1245 s the pressures agree to 5 to 24 mPa. The door-jet heat release rate (within 3%) and the lower-layer oxygen (within 0.0003 mass fraction) agree with CFAST, and the Newton iteration shows no pressure error cycle at that time. The cause of the 0.65 s offset is not yet identified.
+- `validation/cases/delco/Test_06.in`: Worst: West Double Door, vent flow, lower inflow (kg/s) at 1230 s, CFAST 0.0062891, model 0.040406, ratio 6.8234. At 1230 s the three burners are re-igniting after an oxygen-limited extinction (about 1190 to 1215 s). The door's lower inflow depends on the gauge pressure in Comp 3, which is −0.034 Pa in CFAST and −0.118 Pa in the model. This sets the neutral plane at 0.053 m in CFAST and 0.184 m in the model, and inflow scales as height^1.5, so the flows are 0.0063 and about 0.040 kg/s. The pressure sits on a steep flank of a short pulse, which falls by 0.12 Pa/s in Comp 3 and 0.40 Pa/s in Comp 1. All three pressures, the interface heights and the layer temperatures are consistent with the model's pulse arriving about 0.65 s earlier than CFAST's. At 1215 s and 1245 s the pressures agree to 5 to 24 mPa. The door-jet heat release rate (within 3%) and the lower-layer oxygen (within 0.0003 mass fraction) agree with CFAST, and the Newton iteration shows no pressure error cycle at that time. The cause of the 0.65 s offset is not yet identified.
 - `validation/cases/verification/Mass_Balance/species_mass_2.in`: Worst: WallVent_1, vent flow, lower outflow (kg/s) at 630 s, CFAST 0.049075, model 0.036588, ratio 2.4973. Numerics. The model uses a fixed-order BDF2 integrator with the DASSL corrector. A two-step pressure error cycle can survive one scaled Newton iteration on a stale Jacobian (the worst vent flow is at 630 s). A fully converged corrector matched CFAST within 0.0015 kg/s. Future item: port the full DASSL variable-order integrator (design.md).
 - `validation/cases/verification/Mass_Balance/species_mass_4.in`: Numerics. The model uses a fixed-order BDF2 integrator with the DASSL corrector. A two-step pressure error cycle can survive one scaled Newton iteration on a stale Jacobian (at 1300 s the cycle is about ±1.05 mPa on a door pressure difference of 2.8 mPa). A fully converged corrector matched CFAST within 0.0015 kg/s. Future item: port the full DASSL variable-order integrator (design.md). The case also reaches the 600 s wall-clock limit (Req 13.14), at 7540 s of 10000 s simulated time, so no comparison was made.
 
@@ -397,46 +397,46 @@ Result: **outside tolerance**
 
 Reason: 19 time points outside tolerance
 
-Closest to the limit: West Double Door, vent flow, lower inflow (kg/s) at 1230 s. CFAST 0.0062891, model 0.040082, ratio of difference to allowed difference 6.7586 (above 1 is outside tolerance).
+Closest to the limit: West Double Door, vent flow, lower inflow (kg/s) at 1230 s. CFAST 0.0062891, model 0.040406, ratio of difference to allowed difference 6.8234 (above 1 is outside tolerance).
 
 | Entity | Quantity | Time (s) | CFAST value | Model value | Difference (model - CFAST) | Points checked | Points outside | Result |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Comp 1 | upper layer Rise (K) | 720 | 310.53 | 322.26 | 11.729 | 108 | 0 | within tolerance |
-| Comp 1 | lower layer Rise (K) | 720 | 186.5 | 189.02 | 2.5209 | 108 | 0 | within tolerance |
-| Comp 1 | interface height (m) | 720 | 1.0648 | 0.98221 | -0.08258 | 108 | 0 | within tolerance |
-| Comp 2 | upper layer Rise (K) | 1230 | 222.85 | 228.12 | 5.2689 | 108 | 0 | within tolerance |
-| Comp 2 | lower layer Rise (K) | 720 | 42.24 | 43.269 | 1.0294 | 108 | 0 | within tolerance |
-| Comp 2 | interface height (m) | 720 | 0.73825 | 0.71479 | -0.023457 | 108 | 0 | within tolerance |
-| Comp 3 | upper layer Rise (K) | 1230 | 139.52 | 142.34 | 2.8208 | 108 | 0 | within tolerance |
-| Comp 3 | lower layer Rise (K) | 720 | 14.989 | 15.325 | 0.33636 | 108 | 0 | within tolerance |
-| Comp 3 | interface height (m) | 1230 | 0.84299 | 0.82857 | -0.014412 | 108 | 0 | within tolerance |
+| Comp 1 | upper layer Rise (K) | 720 | 310.53 | 322.34 | 11.802 | 108 | 0 | within tolerance |
+| Comp 1 | lower layer Rise (K) | 720 | 186.5 | 189.03 | 2.5362 | 108 | 0 | within tolerance |
+| Comp 1 | interface height (m) | 720 | 1.0648 | 0.9818 | -0.082995 | 108 | 0 | within tolerance |
+| Comp 2 | upper layer Rise (K) | 1230 | 222.85 | 228.17 | 5.3128 | 108 | 0 | within tolerance |
+| Comp 2 | lower layer Rise (K) | 720 | 42.24 | 43.273 | 1.0333 | 108 | 0 | within tolerance |
+| Comp 2 | interface height (m) | 720 | 0.73825 | 0.71465 | -0.023597 | 108 | 0 | within tolerance |
+| Comp 3 | upper layer Rise (K) | 1230 | 139.52 | 142.37 | 2.8442 | 108 | 0 | within tolerance |
+| Comp 3 | lower layer Rise (K) | 720 | 14.989 | 15.328 | 0.33877 | 108 | 0 | within tolerance |
+| Comp 3 | interface height (m) | 1230 | 0.84299 | 0.82847 | -0.014518 | 108 | 0 | within tolerance |
 | West Double Door | vent flow, upper inflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
-| West Double Door | vent flow, upper outflow (kg/s) | 135 | 0.65919 | 0.80445 | 0.14526 | 108 | 1 | outside tolerance |
-| West Double Door | vent flow, lower inflow (kg/s) | 1230 | 0.0062891 | 0.040082 | 0.033793 | 108 | 2 | outside tolerance |
-| West Double Door | vent flow, lower outflow (kg/s) | 1230 | 0.34448 | 0.25632 | -0.088165 | 108 | 2 | outside tolerance |
+| West Double Door | vent flow, upper outflow (kg/s) | 135 | 0.65919 | 0.80537 | 0.14618 | 108 | 1 | outside tolerance |
+| West Double Door | vent flow, lower inflow (kg/s) | 1230 | 0.0062891 | 0.040406 | 0.034117 | 108 | 2 | outside tolerance |
+| West Double Door | vent flow, lower outflow (kg/s) | 1230 | 0.34448 | 0.25568 | -0.088798 | 108 | 2 | outside tolerance |
 | East Double Door | vent flow, upper inflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
-| East Double Door | vent flow, upper outflow (kg/s) | 915 | 0.037007 | 0.037094 | 0.000087893 | 108 | 0 | within tolerance |
-| East Double Door | vent flow, lower inflow (kg/s) | 495 | 0.12917 | 0.12901 | -0.00016287 | 108 | 0 | within tolerance |
-| East Double Door | vent flow, lower outflow (kg/s) | 510 | 0.07133 | 0.071265 | -0.000065251 | 108 | 0 | within tolerance |
+| East Double Door | vent flow, upper outflow (kg/s) | 915 | 0.037007 | 0.037097 | 0.000090675 | 108 | 0 | within tolerance |
+| East Double Door | vent flow, lower inflow (kg/s) | 495 | 0.12917 | 0.12901 | -0.00015795 | 108 | 0 | within tolerance |
+| East Double Door | vent flow, lower outflow (kg/s) | 510 | 0.07133 | 0.071269 | -0.000061121 | 108 | 0 | within tolerance |
 | South Door | vent flow, upper inflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
 | South Door | vent flow, upper outflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
 | South Door | vent flow, lower inflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
 | South Door | vent flow, lower outflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
-| North East Door | vent flow, upper inflow (kg/s) | 135 | 0.021906 | 0.0024878 | -0.019418 | 108 | 1 | outside tolerance |
-| North East Door | vent flow, upper outflow (kg/s) | 135 | 0.46545 | 0.59695 | 0.1315 | 108 | 1 | outside tolerance |
-| North East Door | vent flow, lower inflow (kg/s) | 1230 | 0.11117 | 0.15035 | 0.039181 | 108 | 3 | outside tolerance |
-| North East Door | vent flow, lower outflow (kg/s) | 1230 | 0.11219 | 0.073486 | -0.038708 | 108 | 2 | outside tolerance |
-| South East Door | vent flow, upper inflow (kg/s) | 120 | 0.009383 | 0.009542 | 0.00015907 | 108 | 0 | within tolerance |
-| South East Door | vent flow, upper outflow (kg/s) | 135 | 0.34417 | 0.44932 | 0.10514 | 108 | 1 | outside tolerance |
-| South East Door | vent flow, lower inflow (kg/s) | 135 | 0.61006 | 0.50384 | -0.10623 | 108 | 3 | outside tolerance |
-| South East Door | vent flow, lower outflow (kg/s) | 135 | 0.13075 | 0.20913 | 0.078384 | 108 | 3 | outside tolerance |
+| North East Door | vent flow, upper inflow (kg/s) | 135 | 0.021906 | 0.0024035 | -0.019502 | 108 | 1 | outside tolerance |
+| North East Door | vent flow, upper outflow (kg/s) | 135 | 0.46545 | 0.59768 | 0.13223 | 108 | 1 | outside tolerance |
+| North East Door | vent flow, lower inflow (kg/s) | 1230 | 0.11117 | 0.15066 | 0.039494 | 108 | 3 | outside tolerance |
+| North East Door | vent flow, lower outflow (kg/s) | 1230 | 0.11219 | 0.073219 | -0.038975 | 108 | 2 | outside tolerance |
+| South East Door | vent flow, upper inflow (kg/s) | 120 | 0.009383 | 0.009542 | 0.00015906 | 108 | 0 | within tolerance |
+| South East Door | vent flow, upper outflow (kg/s) | 135 | 0.34417 | 0.45007 | 0.1059 | 108 | 1 | outside tolerance |
+| South East Door | vent flow, lower inflow (kg/s) | 135 | 0.61006 | 0.50322 | -0.10685 | 108 | 3 | outside tolerance |
+| South East Door | vent flow, lower outflow (kg/s) | 135 | 0.13075 | 0.20948 | 0.078735 | 108 | 3 | outside tolerance |
 | Roof Vent | vent flow, upper inflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
 | Roof Vent | vent flow, upper outflow (kg/s) | 495 | 0.00015537 | 0 | -0.00015537 | 108 | 0 | within tolerance |
 | Roof Vent | vent flow, lower inflow (kg/s) | 60 | 0 | 0 | 0 | 108 | 0 | within tolerance |
-| Roof Vent | vent flow, lower outflow (kg/s) | 1290 | 0.068518 | 0.069 | 0.0004815 | 108 | 0 | within tolerance |
-| Floor Leak Comp 1 | leakage vent net flow out of the compartment (kg/s) | 135 | -0.023238 | -0.021119 | 0.0021191 | 108 | 0 | within tolerance |
-| Floor Leak Comp 2 | leakage vent net flow out of the compartment (kg/s) | 720 | 0.0016919 | -0.00091457 | -0.0026065 | 108 | 0 | within tolerance |
-| Floor Leak Comp 3 | leakage vent net flow out of the compartment (kg/s) | 1230 | -0.0021184 | -0.003981 | -0.0018626 | 108 | 0 | within tolerance |
+| Roof Vent | vent flow, lower outflow (kg/s) | 1290 | 0.068518 | 0.069 | 0.00048173 | 108 | 0 | within tolerance |
+| Floor Leak Comp 1 | leakage vent net flow out of the compartment (kg/s) | 135 | -0.023238 | -0.021106 | 0.0021318 | 108 | 0 | within tolerance |
+| Floor Leak Comp 2 | leakage vent net flow out of the compartment (kg/s) | 720 | 0.0016919 | -0.00092781 | -0.0026197 | 108 | 0 | within tolerance |
+| Floor Leak Comp 3 | leakage vent net flow out of the compartment (kg/s) | 1230 | -0.0021184 | -0.0039919 | -0.0018735 | 108 | 0 | within tolerance |
 
 Each row shows the time of the largest deviation from the allowed difference.
 
@@ -445,31 +445,31 @@ Each row shows the time of the largest deviation from the allowed difference.
 
 | Entity | Quantity | Time (s) | CFAST value | Model value | Difference (model - CFAST) |
 | --- | --- | --- | --- | --- | --- |
-| West Double Door | vent flow, upper outflow (kg/s) | 135 | 0.65919 | 0.80445 | 0.14526 |
-| West Double Door | vent flow, lower inflow (kg/s) | 135 | 1.0563 | 0.8275 | -0.22875 |
-| West Double Door | vent flow, lower inflow (kg/s) | 1230 | 0.0062891 | 0.040082 | 0.033793 |
-| West Double Door | vent flow, lower outflow (kg/s) | 720 | 0.49029 | 0.42894 | -0.061355 |
-| West Double Door | vent flow, lower outflow (kg/s) | 1230 | 0.34448 | 0.25632 | -0.088165 |
-| North East Door | vent flow, upper inflow (kg/s) | 135 | 0.021906 | 0.0024878 | -0.019418 |
-| North East Door | vent flow, upper outflow (kg/s) | 135 | 0.46545 | 0.59695 | 0.1315 |
-| North East Door | vent flow, lower inflow (kg/s) | 135 | 0.69568 | 0.52421 | -0.17147 |
-| North East Door | vent flow, lower inflow (kg/s) | 720 | 0 | 0.012922 | 0.012922 |
-| North East Door | vent flow, lower inflow (kg/s) | 1230 | 0.11117 | 0.15035 | 0.039181 |
-| North East Door | vent flow, lower outflow (kg/s) | 720 | 0.35248 | 0.2797 | -0.072784 |
-| North East Door | vent flow, lower outflow (kg/s) | 1230 | 0.11219 | 0.073486 | -0.038708 |
-| South East Door | vent flow, upper outflow (kg/s) | 135 | 0.34417 | 0.44932 | 0.10514 |
-| South East Door | vent flow, lower inflow (kg/s) | 135 | 0.61006 | 0.50384 | -0.10623 |
-| South East Door | vent flow, lower inflow (kg/s) | 720 | 0.14272 | 0.16479 | 0.022069 |
-| South East Door | vent flow, lower inflow (kg/s) | 1230 | 0.25883 | 0.28612 | 0.027297 |
-| South East Door | vent flow, lower outflow (kg/s) | 135 | 0.13075 | 0.20913 | 0.078384 |
-| South East Door | vent flow, lower outflow (kg/s) | 720 | 0.56076 | 0.45149 | -0.10927 |
-| South East Door | vent flow, lower outflow (kg/s) | 1230 | 0.22863 | 0.16613 | -0.062508 |
+| West Double Door | vent flow, upper outflow (kg/s) | 135 | 0.65919 | 0.80537 | 0.14618 |
+| West Double Door | vent flow, lower inflow (kg/s) | 135 | 1.0563 | 0.82611 | -0.23014 |
+| West Double Door | vent flow, lower inflow (kg/s) | 1230 | 0.0062891 | 0.040406 | 0.034117 |
+| West Double Door | vent flow, lower outflow (kg/s) | 720 | 0.49029 | 0.42853 | -0.061761 |
+| West Double Door | vent flow, lower outflow (kg/s) | 1230 | 0.34448 | 0.25568 | -0.088798 |
+| North East Door | vent flow, upper inflow (kg/s) | 135 | 0.021906 | 0.0024035 | -0.019502 |
+| North East Door | vent flow, upper outflow (kg/s) | 135 | 0.46545 | 0.59768 | 0.13223 |
+| North East Door | vent flow, lower inflow (kg/s) | 135 | 0.69568 | 0.52319 | -0.17249 |
+| North East Door | vent flow, lower inflow (kg/s) | 720 | 0 | 0.013043 | 0.013043 |
+| North East Door | vent flow, lower inflow (kg/s) | 1230 | 0.11117 | 0.15066 | 0.039494 |
+| North East Door | vent flow, lower outflow (kg/s) | 720 | 0.35248 | 0.27928 | -0.0732 |
+| North East Door | vent flow, lower outflow (kg/s) | 1230 | 0.11219 | 0.073219 | -0.038975 |
+| South East Door | vent flow, upper outflow (kg/s) | 135 | 0.34417 | 0.45007 | 0.1059 |
+| South East Door | vent flow, lower inflow (kg/s) | 135 | 0.61006 | 0.50322 | -0.10685 |
+| South East Door | vent flow, lower inflow (kg/s) | 720 | 0.14272 | 0.16493 | 0.022206 |
+| South East Door | vent flow, lower inflow (kg/s) | 1230 | 0.25883 | 0.28633 | 0.027509 |
+| South East Door | vent flow, lower outflow (kg/s) | 135 | 0.13075 | 0.20948 | 0.078735 |
+| South East Door | vent flow, lower outflow (kg/s) | 720 | 0.56076 | 0.45093 | -0.10983 |
+| South East Door | vent flow, lower outflow (kg/s) | 1230 | 0.22863 | 0.16568 | -0.062955 |
 
 </details>
 
 **Known cause**
 
-At 1230 s the three burners are re-igniting after an oxygen-limited extinction (about 1190 to 1215 s). The door's lower inflow depends on the gauge pressure in Comp 3, which is −0.034 Pa in CFAST and −0.118 Pa in the model. This sets the neutral plane at 0.053 m in CFAST and 0.184 m in the model, and inflow scales as height^1.5, so the flows are 0.0063 and 0.0401 kg/s. The pressure sits on a steep flank of a short pulse, which falls by 0.12 Pa/s in Comp 3 and 0.40 Pa/s in Comp 1. All three pressures, the interface heights and the layer temperatures are consistent with the model's pulse arriving about 0.65 s earlier than CFAST's. At 1215 s and 1245 s the pressures agree to 5 to 24 mPa. The door-jet heat release rate (within 3%) and the lower-layer oxygen (within 0.0003 mass fraction) agree with CFAST, and the Newton iteration shows no pressure error cycle at that time. The cause of the 0.65 s offset is not yet identified.
+At 1230 s the three burners are re-igniting after an oxygen-limited extinction (about 1190 to 1215 s). The door's lower inflow depends on the gauge pressure in Comp 3, which is −0.034 Pa in CFAST and −0.118 Pa in the model. This sets the neutral plane at 0.053 m in CFAST and 0.184 m in the model, and inflow scales as height^1.5, so the flows are 0.0063 and about 0.040 kg/s. The pressure sits on a steep flank of a short pulse, which falls by 0.12 Pa/s in Comp 3 and 0.40 Pa/s in Comp 1. All three pressures, the interface heights and the layer temperatures are consistent with the model's pulse arriving about 0.65 s earlier than CFAST's. At 1215 s and 1245 s the pressures agree to 5 to 24 mPa. The door-jet heat release rate (within 3%) and the lower-layer oxygen (within 0.0003 mass fraction) agree with CFAST, and the Newton iteration shows no pressure error cycle at that time. The cause of the 0.65 s offset is not yet identified.
 
 **CFAST-order run versus intended-order run** (Req 6.13; the verdict above is for the CFAST-order run)
 
@@ -477,7 +477,7 @@ no difference
 
 **CFAST roof-vent outside density versus real ambient density** (Req 5.10; the verdict above is for the CFAST density)
 
-Largest absolute difference: 15.553 in upper layer Rise (K) of Comp 1 at 1230 s (CFAST density run 395.94, ambient density run 411.49).
+Largest absolute difference: 15.472 in upper layer Rise (K) of Comp 1 at 1230 s (CFAST density run 396.02, ambient density run 411.49).
 
 **Door-jet fires on** (Req 6.14; setting of the CFAST input, used by the verdict run)
 
@@ -485,13 +485,13 @@ Largest absolute difference: 15.553 in upper layer Rise (K) of Comp 1 at 1230 s 
 
 | Species | Net change (kg) | Sum of absolute changes (kg) |
 | --- | --- | --- |
-| o2 | -1.1733 | 25.28 |
-| co2 | 0.91056 | 3.5393 |
-| co | 0.0074376 | 0.028909 |
-| h2o | 0.50277 | 3.8884 |
-| soot | 0.0015477 | 0.0060306 |
-| n2 | -0.19157 | 99.158 |
-| uhc | 0.014978 | 0.055698 |
+| o2 | -1.1793 | 25.365 |
+| co2 | 0.91287 | 3.5387 |
+| co | 0.0074564 | 0.028905 |
+| h2o | 0.50385 | 3.8935 |
+| soot | 0.0015517 | 0.0060296 |
+| n2 | -0.2021 | 99.44 |
+| uhc | 0.015274 | 0.055798 |
 
 ### validation/cases/steckler/Steckler_010.in
 
@@ -1240,7 +1240,7 @@ no difference
 
 Result: **outside tolerance**
 
-Reason: The CFAST-order run (verdict run) was stopped at the 600 s wall-clock limit (Req 13.14). Simulated time reached: 7540 s of 10000 s (time of the last sample). Wall-clock time: 600 s.
+Reason: The CFAST-order run (verdict run) was stopped at the 600 s wall-clock limit (Req 13.14). Simulated time reached: 7500 s of 10000 s (time of the last sample). Wall-clock time: 940.25 s.
 
 No comparison with CFAST was made for this case.
 

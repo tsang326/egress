@@ -1,5 +1,5 @@
-// Compare (run-view spec, Requirement 6): variant B is run A with exactly one change (a door, a window, or the fire
-// room). Both plans side by side on one timeline, and a table of differences read from the two results.
+// Compare (run-view spec, Requirement 6): variant B is run A with exactly one change (a door, a window, the fire
+// room, or the alarm time). Both plans side by side on one timeline, and a table of differences read from the two results.
 import { withOpenEdits, type PlanSession } from '../home/sampleConfigs';
 import { SAFETY_NOTICE } from '../plan/importScreen';
 import { metricsOf } from '../results/metrics';
@@ -11,11 +11,17 @@ import { doorLabel, toggleEdit } from '../setup/setupScreen';
 import { button, el, fmtTime } from '../ui';
 import { diffRows } from './diffTable';
 
-export type OneChange = { kind: 'door'; doorId: string } | { kind: 'fireRoom'; roomId: string };
+export type OneChange = { kind: 'door'; doorId: string } | { kind: 'fireRoom'; roomId: string } | { kind: 'alarm'; alarmTimeS: number };
+
+/** Alarm times offered in the compare panel, s. */
+export const ALARM_CHOICES_S = [0, 30, 60, 120, 180, 300];
 
 /** Variant B: run A's session and setup with one change applied. */
 export function applyChange(run: RunResult, change: OneChange): { session: PlanSession; state: SetupState; label: string } {
   const model = run.session.result.model!;
+  if (change.kind === 'alarm') {
+    return { session: run.session, state: { ...run.config, alarmTimeS: change.alarmTimeS }, label: `alarm at ${change.alarmTimeS} s instead of ${run.config.alarmTimeS} s` };
+  }
   if (change.kind === 'fireRoom') {
     const r = model.rooms.find((x) => x.id === change.roomId)!;
     return { session: run.session, state: { ...run.config, fireRoomId: r.id, fireSiteM: null }, label: `fire moved to ${r.name} (${r.floorId})` };
@@ -43,7 +49,7 @@ export function createChangePanel(container: HTMLElement, opts: ChangePanelOptio
   const panel = el('div', 'rv-panel');
   const kind = el('select');
   kind.setAttribute('aria-label', 'Kind of change');
-  for (const [v, t] of [['door', 'Open or close a door'], ['window', 'Open or close a window'], ['fireRoom', 'Move the fire to another room']] as const) {
+  for (const [v, t] of [['door', 'Open or close a door'], ['window', 'Open or close a window'], ['fireRoom', 'Move the fire to another room'], ['alarm', 'Change when the alarm sounds']] as const) {
     const o = el('option', undefined, t);
     o.value = v;
     kind.appendChild(o);
@@ -52,7 +58,13 @@ export function createChangePanel(container: HTMLElement, opts: ChangePanelOptio
   value.setAttribute('aria-label', 'What to change');
   const fill = (): void => {
     value.replaceChildren();
-    if (kind.value === 'fireRoom') {
+    if (kind.value === 'alarm') {
+      for (const a of ALARM_CHOICES_S.filter((x) => x !== run.config.alarmTimeS)) {
+        const o = el('option', undefined, a === 0 ? 'Alarm at 0 s (the moment the fire starts)' : `Alarm at ${a} s`);
+        o.value = `alarm:${a}`;
+        value.appendChild(o);
+      }
+    } else if (kind.value === 'fireRoom') {
       for (const r of model.rooms.filter((x) => x.kind !== 'stair' && x.id !== run.config.fireRoomId && run.session.fire.compartments.some((c) => c.id === x.id))) {
         const o = el('option', undefined, `${r.name} (${r.floorId}, ${r.areaM2.toFixed(0)} m²)`);
         o.value = `room:${r.id}`;
@@ -75,7 +87,11 @@ export function createChangePanel(container: HTMLElement, opts: ChangePanelOptio
       err.textContent = 'Choose what to change.';
       return;
     }
-    const change: OneChange = v.startsWith('room:') ? { kind: 'fireRoom', roomId: v.slice(5) } : { kind: 'door', doorId: v.slice(5) };
+    const change: OneChange = v.startsWith('alarm:')
+      ? { kind: 'alarm', alarmTimeS: Number(v.slice(6)) }
+      : v.startsWith('room:')
+        ? { kind: 'fireRoom', roomId: v.slice(5) }
+        : { kind: 'door', doorId: v.slice(5) };
     const b = applyChange(run, change);
     if (b.session.result.status !== 'ok') {
       err.textContent = 'The plan has a problem after this change (for example no exit left). Choose another change.';

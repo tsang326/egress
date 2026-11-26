@@ -15,8 +15,7 @@ Built for Kiroween 2026, Frankenstein category. Four things that were never mean
 | Crowd movement | Game AI: grid flow fields and queues, with SFPE walking speeds and door flows, and ISO 13571 toxic dose | `src/core/people/` |
 | Building plans | CAD drawings (DXF), read by our own parser and turned into rooms, doors, stairs and fire compartments | `src/core/plan/` |
 
-**This is a simplified simulation for understanding risks. It does not replace a fire-safety review by the authorities
-or an engineer.** It never says a building is acceptable, and it shows its own weak spots (stairs, long corridors,
+**This is a simplified simulation for understanding risks. It does not replace a fire-safety review by the authorities or an engineer.** It never says a building is acceptable, and it shows its own weak spots (stairs, long corridors,
 positions close to the fire) as warnings next to the numbers they affect.
 
 ## Try it
@@ -46,6 +45,11 @@ Everything started from steering and specs in [`/.kiro`](.kiro):
 | `plan-import` (DXF) | 75 of 75 | Kiro |
 | `run-view` (the app screens) | 16 of 16 | Claude Code, from Kiro's spec, after the Kiro credits ran out |
 
+- **Hooks** (`.kiro/hooks/`): `safety-wording-on-save` runs the screen tests (banned life-safety words, the results
+  notice, no network calls) when a file under `src/web/` is saved; `crowd-tests-on-core-change` runs the crowd and
+  end-to-end tests after a spec task if `src/core/people` changed. Both were added at the end, after the Kiro credits
+  ran out; they were not part of the main build.
+
 When a spec turned out wrong during implementation, the spec was amended rather than the code drifting away from it.
 Those amendments are marked in the requirements, and `run-view/design.md` ends with "Decisions during implementation".
 
@@ -55,6 +59,13 @@ Those amendments are marked in the requirements, and `run-view/design.md` ends w
 tolerance (all 9 Steckler room fires, the energy-balance checks, 2 of 4 mass-balance checks, ventilation, DelCo
 Test_04). 6 are outside: DelCo Test_02, 03, 05, 06 (a few time points each) and two species mass-balance cases. The
 report lists every case as it came out.
+
+## Crowd model notes
+
+The crowd model is a reference simulation. The time at which the last person is out is called the "evacuation time"
+in every output. Each person starts to move a random pre-movement time (log-normal, NIST medians) after the alarm or
+after smoke reaches them. Sources for every constant are in `src/core/people/constants.ts`; developer notes in
+`src/core/people/README.md`. Crowd benchmark (600 s case, fire then crowd): `npm run test:bench:crowd -- --silent=false`.
 
 ## Run it locally
 

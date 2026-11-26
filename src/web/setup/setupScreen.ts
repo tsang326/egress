@@ -216,7 +216,7 @@ export function createSetupScreen(container: HTMLElement, opts: SetupOptions): v
     timing.appendChild(el('h2', undefined, '3. Timing'));
     timing.appendChild(labelled('Alarm sounds at (s)', numberInput(state.alarmTimeS, 0, 5, (v) => (state = { ...state, alarmTimeS: v }))));
     timing.appendChild(labelled('Run length (s)', numberInput(state.durationS, 10, 30, (v) => (state = { ...state, durationS: v }))));
-    timing.appendChild(el('p', 'rv-small', 'People also start to leave when smoke reaches them. Each person waits a random pre-movement time first (seeded, so a run repeats exactly).'));
+    timing.appendChild(el('p', 'rv-small', 'Each person starts to leave a random pre-movement time after the alarm, or after smoke reaches their room if that comes first (median 35 s for visitors, 16 s for staff; seeded, so a run repeats exactly).'));
     right.appendChild(timing);
 
     const openings = el('div', 'rv-panel');

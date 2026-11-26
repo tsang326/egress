@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Crowd tests after a core task",
+      "trigger": "PostTaskExec",
+      "description": "After a spec task completes, run the crowd and end-to-end tests only if src/core/people changed.",
+      "action": {
+        "type": "command",
+        "command": "git diff --quiet HEAD -- src/core/people || npx vitest run tests/people tests/run-view/e2e.test.ts",
+        "timeout": 600
+      }
+    }
+  ]
+}

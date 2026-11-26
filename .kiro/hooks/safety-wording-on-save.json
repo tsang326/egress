@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Safety wording on save",
+      "trigger": "PostFileSave",
+      "description": "When a screen under src/web/ is saved, run the screen tests: banned life-safety words in UI strings (steering safety.md), the results notice, and the no-network scan.",
+      "matcher": "(^|/)src/web/.*\\.ts$",
+      "action": {
+        "type": "command",
+        "command": "npx vitest run tests/run-view/screens.test.ts",
+        "timeout": 120
+      }
+    }
+  ]
+}

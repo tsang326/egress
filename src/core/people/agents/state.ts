@@ -25,6 +25,7 @@ export function createAgentStore(n: number, nExits: number): AgentStore {
     state: new Uint8Array(n).fill(STATE_PRE_MOVE),
     flags: new Uint8Array(n),
     delaySteps: new Int32Array(n),
+    alertStep: new Int32Array(n).fill(-1),
     exitChoice: new Int16Array(n).fill(-1),
     known: new Uint8Array(n * nExits),
     fedAsph: new Float64Array(n),

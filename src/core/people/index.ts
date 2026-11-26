@@ -72,6 +72,8 @@ export function runCrowd(input: CrowdInput, fire: Result, options: CrowdRunOptio
     a.floor[k] = floorIndex;
     a.cell[k] = cellAt(fl, ag.xM, ag.yM);
     a.delaySteps[k] = draws.delaySteps[idx]!;
+    // No alarm time: the run starts at the cue, so every delay counts from step 0 (the original crowd behaviour).
+    if (typeof input.alarmTimeS !== 'number') a.alertStep[k] = 0;
     if (ag.type === 'staff') a.flags[k] = FLAG_STAFF;
     starts.push({ id: ag.id, type: ag.type as AgentType, floorIndex, xM: ag.xM, yM: ag.yM, entryExitId: ag.entryExitId });
   });

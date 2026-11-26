@@ -454,6 +454,12 @@ export const STEP_MAX_FACTOR = 0.9;
 export const STEP_GROWTH_MAX = 2;
 // numerical parameter, not from Tech Ref: the step grows only when the proposed factor reaches this value, otherwise it is kept (fewer matrix refreshes).
 export const STEP_GROWTH_MIN = 1.2;
+// numerical parameter, not from Tech Ref: after this many accepted steps in a row whose proposed factor lies between 1 and
+// STEP_GROWTH_MIN, the step grows by that factor anyway. Without it a run can stall: in the boarding-house sample with a
+// sofa fire in floor1:room2, the gauge pressure of the 5 m2 rooms carried an error estimate of about half the tolerance
+// that did not shrink with h (a noise floor, not truncation error), the proposed factor stayed at 1.13, and the run took
+// 212,000 steps of 9.4e-6 s between t = 40 s and 50 s (100 s of wall time for 60 s simulated).
+export const STEP_FLAT_ACCEPTS = 20;
 // numerical parameter, not from Tech Ref: BDF2 is used only while h / h_previous is at most this value (variable-step BDF2 is unstable above 1 + sqrt(2)); otherwise BDF1 is used.
 export const STEP_BDF2_OMEGA_MAX = 2;
 // numerical parameter, not from Tech Ref: Newton line search. The full Newton step is shortened by NEWTON_LS_REDUCTION, at most

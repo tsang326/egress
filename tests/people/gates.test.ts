@@ -106,6 +106,7 @@ function store(n: number): AgentStore {
     state: new Uint8Array(n).fill(STATE_MOVING),
     flags: new Uint8Array(n),
     delaySteps: new Int32Array(n),
+    alertStep: new Int32Array(n).fill(-1),
     exitChoice: new Int16Array(n),
     known: new Uint8Array(n),
     fedAsph: new Float64Array(n),

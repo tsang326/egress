@@ -213,6 +213,8 @@ Kiro wrote this spec; the tasks were implemented by Claude (Kiro credits had run
 8. **Fire position.** The clicked spot is the fire site for the plan and the crowd model; the zone model places the fire at the centre of the room's equivalent box.
 9. **Determinism scope.** The property test runs the whole pipeline (setup → inputs → both models) on 30 s café runs with 3 cases, plus `buildRun` purity with 25 cases; 100 full runs would take minutes in `npm test`.
 10. **Furniture drawing.** Wall groups whose neighbours all lie in one room are drawn as furniture (light grey) instead of wall; the crowd model still treats them as obstacles.
+11. **Alarm time now matters (crowd core change).** A scenario scan showed the evacuation time did not move when the alarm moved from 30 s to 90 s: the crowd spec counted the pre-movement delay from the start of the run. Crowd Requirement 3.9 and its glossary were amended so the delay counts from the moment each agent is alerted (alarm or smoke at eye height); `src/core/people/sim/loop.ts` stores an `alertStep` per agent.
+12. **Solver stall in small rooms (fire core change).** With a sofa fire in `floor1:room2` of the boarding house the fire model took 100 s of wall time for 60 s simulated: the gauge pressure of the 5 m² rooms had an error estimate near half the tolerance that did not shrink with the step, so the proposed growth factor (1.13) never reached `STEP_GROWTH_MIN` (1.2) and the step stayed at 9.4e-6 s. `STEP_FLAT_ACCEPTS` (20) now lets the step grow by its factor after 20 such accepted steps in a row (`src/core/fire/solver/stepControl.ts`); the same run takes 874 steps and 3 s. The fire validation was rerun after the change.
 
 ## Correctness properties
 

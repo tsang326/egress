@@ -100,7 +100,7 @@ The app is a reference simulation for understanding risks. No screen states or i
 
 #### Acceptance Criteria
 
-1. THE Compare_Screen SHALL let the user duplicate the current Scenario_Config as variant B and change exactly one thing: open or close a door, open or close a window, or move the fire to a different room.
+1. THE Compare_Screen SHALL let the user duplicate the current Scenario_Config as variant B and change exactly one thing: open or close a door, open or close a window, move the fire to a different room, or change the alarm time. *(Amended during implementation: the alarm time was added once the crowd core counted pre-movement from the alarm; a working or late alarm is the most common real difference between two otherwise identical buildings.)*
 2. THE Compare_Screen SHALL run both variants and show the two plan views side by side with a single shared timeline scrubber.
 3. THE Compare_Screen SHALL show a difference table with: people out (A and B), incapacitated (A and B), evacuation time (A and B), and time until the fire room becomes untenable (A and B).
 4. THE Compare_Screen SHALL be limited to exactly two variants (A and B). Adding a third variant is out of scope.

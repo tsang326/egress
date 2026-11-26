@@ -18,7 +18,7 @@ export const KNOWN_CAUSES: Readonly<Record<string, string>> = {
     'At 1230 s the three burners are re-igniting after an oxygen-limited extinction (about 1190 to 1215 s). The door\'s ' +
     'lower inflow depends on the gauge pressure in Comp 3, which is −0.034 Pa in CFAST and −0.118 Pa in the model. This ' +
     'sets the neutral plane at 0.053 m in CFAST and 0.184 m in the model, and inflow scales as height^1.5, so the flows ' +
-    'are 0.0063 and 0.0401 kg/s. The pressure sits on a steep flank of a short pulse, which falls by 0.12 Pa/s in Comp 3 ' +
+    'are 0.0063 and about 0.040 kg/s. The pressure sits on a steep flank of a short pulse, which falls by 0.12 Pa/s in Comp 3 ' +
     'and 0.40 Pa/s in Comp 1. All three pressures, the interface heights and the layer temperatures are consistent with ' +
     'the model\'s pulse arriving about 0.65 s earlier than CFAST\'s. At 1215 s and 1245 s the pressures agree to 5 to 24 ' +
     'mPa. The door-jet heat release rate (within 3%) and the lower-layer oxygen (within 0.0003 mass fraction) agree with ' +
