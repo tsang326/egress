@@ -13,12 +13,15 @@
     "test:watch": "vitest",
     "test:bench": "FIRE_BENCH=1 vitest run tests/fire/bench --silent=false",
     "test:bench:crowd": "CROWD_BENCH=1 vitest run tests/people/bench",
+    "test:bench:plan": "PLAN_BENCH=1 vitest run tests/plan/bench --silent=false",
+    "samples": "esbuild tools/samples/generate.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/egress-samples/generate.mjs && node node_modules/.cache/egress-samples/generate.mjs --write",
     "test:validation": "vitest run validation"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
     "esbuild": "0.28.2",
     "fast-check": "4.3.0",
+    "happy-dom": "21.0.4",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
     "vitest": "5.1.0"

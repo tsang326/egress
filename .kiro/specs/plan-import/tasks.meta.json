@@ -1,0 +1,1153 @@
+{
+  "pbtResults": {
+    "4.2 Write property test for layer name normalization in `tests/plan/layers.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795579951778
+    },
+    "10.3 Write property test for stair overlap tolerance in `tests/plan/stairs.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795589195386
+    },
+    "6.4 Write property test for INSERT transform equivalence in `tests/plan/transform.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795589239358
+    },
+    "13.3 Write property test for door width and vent width in `tests/plan/doorWidth.property.test.ts`": {
+      "status": "not_run",
+      "lastRunTimestamp": 1795591037361
+    },
+    "13.4 Write property test for the equivalent box in `tests/plan/equivalentBox.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597119882
+    },
+    "14.4 Write property test for unit scaling in `tests/plan/units.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597479231
+    },
+    "14.6 Write property test for malformed and truncated DXF in `tests/plan/robustness.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597482338
+    },
+    "14.7 Write property test for determinism in `tests/plan/determinism.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597492286
+    },
+    "14.5 Write property test for agreement of the derived outputs in `tests/plan/agreement.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597527484
+    },
+    "14.3 Write property test for the DXF round trip in `tests/plan/roundTrip.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597691021
+    },
+    "14.8 Write property test for edit stability in `tests/plan/editsStable.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597777562
+    },
+    "15.2 Write property test for project file round trip in `tests/plan/project.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597792491
+    },
+    "14.9 Write property test for no throw on object-shaped input in `tests/plan/noThrow.property.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1795597803745
+    }
+  },
+  "executionHistory": {
+    "1.1 Create the shared types and constants in `src/core/plan/`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579553444
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579568378
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579757531
+      }
+    ],
+    "2.1 Implement `dxf/tokenize.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579553630
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579763037
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579886864
+      }
+    ],
+    "2.2 Implement `dxf/transform.ts`, `dxf/entities.ts` and `dxf/blocks.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579553705
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579894487
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580235720
+      }
+    ],
+    "2.3 Implement `dxf/header.ts`, `dxf/reader.ts` and `units.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579553781
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580244796
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581553637
+      }
+    ],
+    "2.4 Write unit tests for the DXF reader in `tests/plan/dxf.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579553874
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581565588
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581961692
+      }
+    ],
+    "3.1 Write the test DXF writer `tests/plan/helpers/dxfWriter.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579553967
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579763441
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579887400
+      }
+    ],
+    "3.2 Write the random grid plan generator `tests/plan/helpers/planArbitraries.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554149
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579894566
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580235343
+      }
+    ],
+    "4.1 Implement `layers.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554227
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579763918
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579888225
+      }
+    ],
+    "4.2 Write property test for layer name normalization in `tests/plan/layers.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554327
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579894833
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580236883
+      }
+    ],
+    "5. Checkpoint - reader and layers": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554421
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598877597
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598915320
+      }
+    ],
+    "6.1 Implement `floorSources.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554487
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581565704
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581960921
+      }
+    ],
+    "6.2 Implement `grid/rasterize.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554561
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581566474
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581959024
+      }
+    ],
+    "6.3 Implement `grid/gaps.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554666
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581970705
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589128795
+      }
+    ],
+    "6.4 Write property test for INSERT transform equivalence in `tests/plan/transform.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554769
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589139332
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589294871
+      }
+    ],
+    "6.5 Write unit tests for floor sources, rasterizer and gaps in `tests/plan/grid.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554876
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589139528
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589297130
+      }
+    ],
+    "7.1 Implement `grid/doors.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579554960
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581971443
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589127878
+      }
+    ],
+    "7.2 Write unit tests for doors in `tests/plan/doors.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555054
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589140352
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589298042
+      }
+    ],
+    "8.1 Implement `grid/rooms.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555199
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589141183
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589298542
+      }
+    ],
+    "8.2 Write unit tests for rooms in `tests/plan/rooms.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555283
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589409314
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589574752
+      }
+    ],
+    "9.1 Implement `derive/equivalentBox.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555364
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581567254
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581958341
+      }
+    ],
+    "9.2 Write unit tests for the compartment mapper in `tests/plan/equivalentBox.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555439
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581972496
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589129854
+      }
+    ],
+    "10.1 Implement floor settings in `model/floorSettings.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555510
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581567722
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581959868
+      }
+    ],
+    "10.2 Implement `model/stairs.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555572
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581973143
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589128251
+      }
+    ],
+    "10.3 Write property test for stair overlap tolerance in `tests/plan/stairs.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555630
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589142005
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589295884
+      }
+    ],
+    "10.4 Write unit tests for floors and stairs in `tests/plan/floorsStairs.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555693
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589307971
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589402887
+      }
+    ],
+    "11.1 Implement `model/exits.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555755
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589409611
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589574495
+      }
+    ],
+    "11.2 Write unit tests for exits in `tests/plan/exits.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555828
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589582054
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589820409
+      }
+    ],
+    "12.1 Implement `model/edits.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579555928
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589410371
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589575527
+      }
+    ],
+    "12.2 Write unit tests for edits in `tests/plan/edits.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556006
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589582330
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589821192
+      }
+    ],
+    "13.1 Implement `derive/toPlanInput.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556095
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589582596
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589819559
+      }
+    ],
+    "13.2 Implement `derive/toFireGeometry.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556190
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589583011
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589819690
+      }
+    ],
+    "13.3 Write property test for door width and vent width in `tests/plan/doorWidth.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556278
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795590773377
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597148175
+      }
+    ],
+    "13.4 Write property test for the equivalent box in `tests/plan/equivalentBox.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556357
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795590773941
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597149113
+      }
+    ],
+    "13.5 Write unit tests for the derivers in `tests/plan/derive.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556465
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589829261
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795590763776
+      }
+    ],
+    "14.1 Implement `import.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556543
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589829153
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597147228
+      }
+    ],
+    "14.2 Implement `agreement.ts` and the limit checks, and call them from `import.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556624
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597157867
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597385199
+      }
+    ],
+    "14.3 Write property test for the DXF round trip in `tests/plan/roundTrip.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556695
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597394649
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597710348
+      }
+    ],
+    "14.4 Write property test for unit scaling in `tests/plan/units.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556769
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597395806
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597711256
+      }
+    ],
+    "14.5 Write property test for agreement of the derived outputs in `tests/plan/agreement.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556877
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597396772
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597712644
+      }
+    ],
+    "14.6 Write property test for malformed and truncated DXF in `tests/plan/robustness.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579556962
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597398394
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597714115
+      }
+    ],
+    "14.7 Write property test for determinism in `tests/plan/determinism.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557029
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597398820
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597714741
+      }
+    ],
+    "14.8 Write property test for edit stability in `tests/plan/editsStable.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557129
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597721347
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597954660
+      }
+    ],
+    "14.9 Write property test for no throw on object-shaped input in `tests/plan/noThrow.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557195
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597722771
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597955051
+      }
+    ],
+    "14.10 Write unit tests for orchestration, limits and size cap in `tests/plan/import.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557277
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597724565
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597956170
+      }
+    ],
+    "15.1 Implement `project/schema.ts`, `project/save.ts` and `project/load.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557367
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597158524
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597386273
+      }
+    ],
+    "15.2 Write property test for project file round trip in `tests/plan/project.property.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557451
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597725441
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597957495
+      }
+    ],
+    "15.3 Write unit tests for the project file in `tests/plan/project.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557530
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597725803
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597958201
+      }
+    ],
+    "16.1 Implement sample builders in `tools/samples/cafe.ts`, `karaoke.ts` and `boardingHouse.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557622
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579895489
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580235176
+      }
+    ],
+    "16.2 Implement `tools/samples/generate.ts`, the npm script and the committed files": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557693
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580245109
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581553845
+      }
+    ],
+    "16.3 Write sample tests in `tests/plan/samples.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557782
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597966280
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598182830
+      }
+    ],
+    "17.1 Write the benchmark test `tests/plan/bench/boardingHouse.bench.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557903
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597966666
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598183779
+      }
+    ],
+    "18.1 Implement `src/web/plan/importScreen.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579557963
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598193981
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598698877
+      }
+    ],
+    "18.2 Implement `src/web/plan/render/preview.ts` and `src/web/plan/render/gridView.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579558020
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597968607
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598185283
+      }
+    ],
+    "18.3 Implement `src/web/plan/planWorker.ts` and `src/web/plan/storage.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579558088
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597969059
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598186775
+      }
+    ],
+    "18.4 Write DOM tests with happy-dom in `tests/plan/web.test.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579558140
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598706342
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598861482
+      }
+    ],
+    "19.1 Wire the import screen into `src/web/main.ts`": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579558201
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598706936
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598861732
+      }
+    ],
+    "20. Final checkpoint - npm test, typecheck and plan benchmark": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579558298
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598920766
+      },
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795658650488
+      }
+    ],
+    "1. Types, constants, limits and warnings": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795579757648
+      }
+    ],
+    "3. Test helpers": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580235450
+      }
+    ],
+    "4. Layer role suggestion": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795580237015
+      }
+    ],
+    "2. DXF reader (own ASCII reader)": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795581961746
+      }
+    ],
+    "9. Compartment boxes": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589129958
+      }
+    ],
+    "6. Floor sources and grid": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589297219
+      }
+    ],
+    "7. Doors": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589298161
+      }
+    ],
+    "10. Floors and stairs": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589402982
+      }
+    ],
+    "8. Rooms": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589574828
+      }
+    ],
+    "11. Exits": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589820536
+      }
+    ],
+    "12. Edits": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795589821275
+      }
+    ],
+    "13. Derivers": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597149332
+      }
+    ],
+    "14. Orchestration, agreement and limits": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597956268
+      }
+    ],
+    "15. Project file": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795597958258
+      }
+    ],
+    "16. Sample generator": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598182979
+      }
+    ],
+    "17. Performance": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598183828
+      }
+    ],
+    "18. Import screen": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598861555
+      }
+    ],
+    "19. Wiring": [
+      {
+        "executionId": "ab27e7ba-9d5c-4446-88b7-c1f262de46a6",
+        "chatSessionId": "sess_4c7d072a-ddff-42ce-b5e6-a5e3765b52f5",
+        "timestamp": 1795598861781
+      }
+    ]
+  }
+}
