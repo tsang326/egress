@@ -67,6 +67,11 @@ const PREVIEW_H_PX = 340;
 export interface UsedPlan {
   planInput: PlanInput;
   fire: { compartments: Compartment[]; vents: Vent[] };
+  // The inputs and the full result, so later screens can re-run the import with door/window edits (run-view spec,
+  // Requirement 2.5). Copies: later changes on this screen do not reach them.
+  sources: ImportSource[];
+  settings: ImportSettings;
+  result: ImportResult;
 }
 
 export interface ImportScreenOptions {
@@ -961,7 +966,7 @@ export function createImportScreen(container: HTMLElement, options: ImportScreen
     const useBtn = button('Use this plan', () => {
       if (r.derived === undefined || r.status !== 'ok') return;
       used = true;
-      options.onUsePlan?.({ planInput: r.derived.planInput, fire: r.derived.fire });
+      options.onUsePlan?.({ planInput: r.derived.planInput, fire: r.derived.fire, sources: [...sources], settings: structuredClone(settings), result: r });
       renderAfterGrid();
     }, !ok);
     usePanel.appendChild(useBtn);

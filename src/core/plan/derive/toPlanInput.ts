@@ -8,6 +8,7 @@
 //  - an open door keeps `door` cells; a closed door becomes `wall` (Req 13.6, 14.4).
 //  - a confirmed exit door becomes `exit` over its full width, and the free cells just outside it (4-neighbours of a
 //    door cell that belong to no room) become `exit` too (Req 12.3). A closed exit door stays wall.
+//  - every other free cell of no room (outside ground) becomes `wall`.
 //  - every stair link footprint is `stair` on both of its floors (Req 14.5), the shape builder.ts `buildLink` needs.
 // Compartment ids: a cell of a room has that room's id (Req 14.1). A door cell has the lower-numbered room of its two
 // sides (Req 8.7). Stair cells that lie in no room get `${floorId}:stair`, the id model/stairs.ts gives the stair
@@ -108,6 +109,11 @@ export function toPlanInput(model: BuildingModel): PlanInputResult {
         }
       }
     }
+
+    // Outside ground (free cells of no room) is not part of any route: leaving through an exit ends the route, and on
+    // upper floors it is air. Keeping it free left strips around the building that the crowd model reported as
+    // UNREACHABLE_REGION (run-view spec, Requirement 8). The exit cells made above are kept.
+    for (let c = 0; c < n; c++) if (cells[c] === CELL_FREE && ids[c] === null && inRoom[c] === 0) cells[c] = CELL_WALL;
 
     floors.push({ id: fl.floorId, elevationM: fl.elevationM, widthCells: w, heightCells: grid.heightCells, cells, compartmentIds: ids });
   }

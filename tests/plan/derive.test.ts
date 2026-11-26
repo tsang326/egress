@@ -159,16 +159,17 @@ describe('toPlanInput', () => {
     const f = r.planInput.floors[0]!;
     for (const c of rect(2, 2, 8, 11)) expect(f.cells[c]).toBe(CELL_EXIT);
     for (const c of rect(1, 1, 8, 11)) expect(f.cells[c]).toBe(CELL_EXIT);
-    // Other outside cells and the room side stay as they were.
-    expect(f.cells[idx(1, 7)]).toBe(CELL_FREE);
-    expect(f.cells[idx(0, 9)]).toBe(CELL_FREE);
+    // Other outside cells become wall (run-view spec Req 8: outside ground is not part of a route); the room side
+    // stays free.
+    expect(f.cells[idx(1, 7)]).toBe(CELL_WALL);
+    expect(f.cells[idx(0, 9)]).toBe(CELL_WALL);
     expect(f.cells[idx(3, 9)]).toBe(CELL_FREE);
   });
 
   it('a closed exit door stays wall and adds no outside exit cells', () => {
     const f = toPlanInput(twoRoomModel([exitDoor({ open: false })])).planInput.floors[0]!;
     for (const c of rect(2, 2, 8, 11)) expect(f.cells[c]).toBe(CELL_WALL);
-    for (const c of rect(1, 1, 8, 11)) expect(f.cells[c]).toBe(CELL_FREE);
+    for (const c of rect(1, 1, 8, 11)) expect(f.cells[c]).toBe(CELL_WALL); // outside ground, not an exit
   });
 
   it('passes the crowd buildPlan, with the exit as a gate (Req 20.10)', () => {
